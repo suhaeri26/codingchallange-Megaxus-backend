@@ -9,33 +9,18 @@ export const registerSchema = z
       .string()
       .trim()
       .min(3)
-      .max(255)
-      .meta({
-        openapi: {
-          example: "John Doe",
-        },
-      }),
+      .max(255),
 
     email: z
       .string()
       .trim()
       .email()
-      .max(255)
-      .meta({
-        openapi: {
-          example: "john@example.com",
-        },
-      }),
+      .max(255),
 
     password: z
       .string()
       .min(8)
-      .max(255)
-      .meta({
-        openapi: {
-          example: "Password123!",
-        },
-      }),
+      .max(255),
   })
   .meta({
     id: "RegisterRequest",
@@ -49,22 +34,12 @@ export const loginSchema = z
       .string()
       .trim()
       .email()
-      .max(255)
-      .meta({
-        openapi: {
-          example: "john@example.com",
-        },
-      }),
+      .max(255),
 
     password: z
       .string()
       .min(8)
       .max(255)
-      .meta({
-        openapi: {
-          example: "Password123!",
-        },
-      }),
   })
   .meta({
     id: "LoginRequest",
@@ -90,12 +65,7 @@ export const resendVerificationSchema = z
       .string()
       .trim()
       .email()
-      .max(255)
-      .meta({
-        openapi: {
-          example: "john@example.com",
-        },
-      }),
+      .max(255),
   })
   .meta({
     id: "ResendVerificationRequest",

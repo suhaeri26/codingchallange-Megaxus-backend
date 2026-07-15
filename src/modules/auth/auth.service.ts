@@ -121,7 +121,7 @@ export class AuthService {
     }
 
     const accessToken =
-      generateAccessToken(user);
+      generateAccessToken(user.get({ plain: true }));
 
     return {
       accessToken,

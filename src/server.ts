@@ -4,7 +4,7 @@ import { registerAssociations } from "./database/assotiation/index.js";
 import { connectDatabase } from "./database/sequelize.js";
 import { logger } from "./shared/utils/logger.js";
 
-const PORT = env.PORT || 3000;
+const PORT = env.PORT || 3030;
 
 const startServer = async (): Promise<void> => {
   try {

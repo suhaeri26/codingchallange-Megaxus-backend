@@ -1,5 +1,5 @@
-import { EmailVerification } from "../models/email-verification.model";
-import {CoinTransaction, GachaEventItem, GachaEvent, Item, User, GachaLog} from "../models/index"
+import { EmailVerification } from "../models/email-verification.model.js";
+import { CoinTransaction, GachaEventItem, GachaEvent, Item, User, GachaLog } from "../models/index.js";
 export function setupAssociations(): void {
   /*
    |--------------------------------------------------------------------------

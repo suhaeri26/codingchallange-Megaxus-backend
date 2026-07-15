@@ -1,4 +1,4 @@
-import { setupAssociations } from "./associations";
+import { setupAssociations } from "./associations.js";
 
 
 export const registerAssociations = (): void => {
