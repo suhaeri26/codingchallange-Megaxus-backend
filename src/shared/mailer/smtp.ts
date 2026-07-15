@@ -16,6 +16,7 @@ class MailerService {
     email: string,
     token: string,
   ): Promise<void> {
+    console.log({env, email, token})
     const verificationUrl = `${env.APP_URL}/verify-email?token=${token}`;
 
     await this.transporter.sendMail({

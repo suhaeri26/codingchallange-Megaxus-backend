@@ -7,7 +7,6 @@ export const createGachaEventItemSchema = z
   .object({
     itemId: z.coerce.number().int().positive(),
     dropRate: z.coerce.number().positive(),
-    stock: z.coerce.number().int().nonnegative().nullable().optional(),
   })
   .meta({
     id: "CreateGachaEventItemRequest",
@@ -17,7 +16,6 @@ export const updateGachaEventItemSchema = z
   .object({
     itemId: z.coerce.number().int().positive().optional(),
     dropRate: z.coerce.number().positive().optional(),
-    stock: z.coerce.number().int().nonnegative().nullable().optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: "At least one field is required.",

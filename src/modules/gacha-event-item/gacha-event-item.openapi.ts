@@ -46,7 +46,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "patch",
-  path: "/items/{id}",
+  path: "/events/items/{id}",
   tags: ["Gacha Event Item"],
   summary: "Update gacha event item",
   security: [{ cookieAuth: [] }],
@@ -69,7 +69,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "delete",
-  path: "/items/{id}",
+  path: "/events/items/{id}",
   tags: ["Gacha Event Item"],
   summary: "Delete gacha event item",
   security: [{ cookieAuth: [] }],

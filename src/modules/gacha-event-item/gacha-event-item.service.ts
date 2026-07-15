@@ -39,7 +39,6 @@ export class GachaEventItemService {
       eventId,
       itemId: payload.itemId,
       dropRate: payload.dropRate,
-      stock: payload.stock ?? null,
     });
   }
 
@@ -62,10 +61,6 @@ export class GachaEventItemService {
 
     if (payload.dropRate !== undefined) {
       item.dropRate = payload.dropRate;
-    }
-
-    if (payload.stock !== undefined) {
-      item.stock = payload.stock;
     }
 
     await item.save();

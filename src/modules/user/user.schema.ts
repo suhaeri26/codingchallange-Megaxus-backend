@@ -14,4 +14,25 @@ export const updateProfileSchema = z
     id: "UpdateProfileRequest",
   });
 
+export const adjustCoinsParamsSchema = z
+  .object({
+    userId: z.coerce.number().int().positive(),
+  })
+  .meta({
+    id: "AdjustCoinsParams",
+  });
+
+export const adjustCoinsSchema = z
+  .object({
+    amount: z.coerce.number().int(),
+  })
+  .refine((data) => data.amount !== 0, {
+    message: "Amount cannot be zero.",
+  })
+  .meta({
+    id: "AdjustCoinsRequest",
+  });
+
 export type UpdateProfileRequest = z.infer<typeof updateProfileSchema>;
+export type AdjustCoinsRequest = z.infer<typeof adjustCoinsSchema>;
+export type AdjustCoinsParams = z.infer<typeof adjustCoinsParamsSchema>;

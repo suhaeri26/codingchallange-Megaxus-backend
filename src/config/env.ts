@@ -32,6 +32,10 @@ const environmentSchema = z.object({
   SMTP_PASSWORD: z.string().min(1),
   SMTP_FROM: z.string().min(1),
   APP_URL: z.string().url(),
+  EMAIL_VERIFICATION_ENABLED: z
+    .enum(["true", "false"])
+    .default("false")
+    .transform((value) => value === "true"),
 });
 
 export const env = environmentSchema.parse(process.env);

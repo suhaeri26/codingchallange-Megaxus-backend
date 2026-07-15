@@ -4,6 +4,7 @@ import { sequelize } from "../../database/sequelize";
 import { EmailVerification } from "../../database/models/email-verification.model";
 import { User } from "../../database/models/user.model";
 
+import { env } from "../../config/env";
 import { AppError } from "../../shared/errors/app-error";
 import { mailerService } from "../../shared/mailer/smtp";
 import {
@@ -45,43 +46,38 @@ export class AuthService {
       payload.password,
     );
 
-    const verificationToken =
-      generateVerificationToken();
+    const user = await sequelize.transaction(async (transaction) => {
+      const user = await User.create(
+        {
+          name: payload.name,
+          email: payload.email,
+          password: hashedPassword,
+          isVerified: !env.EMAIL_VERIFICATION_ENABLED,
+        },
+        {
+          transaction,
+        },
+      );
 
-    const user = await sequelize.transaction(
-  async (transaction) => {
-    const user = await User.create(
-      {
-        name: payload.name,
-        email: payload.email,
-        password: hashedPassword,
-      },
-      {
-        transaction,
-      },
-    );
+      if (env.EMAIL_VERIFICATION_ENABLED) {
+        const verificationToken = generateVerificationToken();
 
-    await EmailVerification.create(
-      {
-        userId: user.id,
-        token: verificationToken,
-        expiredAt: new Date(
-          Date.now() + 1000 * 60 * 15,
-        ),
-      },
-      {
-        transaction,
-      },
-    );
+        await EmailVerification.create(
+          {
+            userId: user.id,
+            token: verificationToken,
+            expiredAt: new Date(Date.now() + 1000 * 60 * 15),
+          },
+          {
+            transaction,
+          },
+        );
 
-    return user;
-  },
-);
+        await mailerService.sendEmailVerification(user.email, verificationToken);
+      }
 
-    await mailerService.sendEmailVerification(
-      user.email,
-      verificationToken,
-    );
+      return user;
+    });
   }
 
   async login(
@@ -113,7 +109,7 @@ export class AuthService {
       );
     }
 
-    if (!user.isVerified) {
+    if (env.EMAIL_VERIFICATION_ENABLED && !user.isVerified) {
       throw new AppError(
         "Please verify your email first.",
         403,
@@ -147,6 +143,10 @@ export class AuthService {
   async verifyEmail(
     payload: VerifyEmailRequest,
   ): Promise<void> {
+    if (!env.EMAIL_VERIFICATION_ENABLED) {
+      return;
+    }
+
     const verification =
       await EmailVerification.findOne({
         where: {
@@ -212,6 +212,10 @@ export class AuthService {
   async resendVerification(
     payload: ResendVerificationRequest,
   ): Promise<void> {
+    if (!env.EMAIL_VERIFICATION_ENABLED) {
+      return;
+    }
+
     const user = await User.findOne({
       where: {
         email: payload.email,

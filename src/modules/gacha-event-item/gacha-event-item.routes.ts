@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { authenticate } from "../../shared/middleware/auth.middleware";
+import { requireAdmin } from "../../shared/middleware/admin.middleware";
 import { validateRequest } from "../../shared/middleware/validate-request";
 import { gachaEventItemController } from "./gacha-event-item.controller";
 import {
@@ -19,6 +20,7 @@ router.get(
 router.post(
   "/:eventId/items",
   authenticate,
+  requireAdmin,
   validateRequest({ params: gachaEventItemsParamsSchema }),
   validateRequest({ body: createGachaEventItemSchema }),
   gachaEventItemController.create.bind(gachaEventItemController),
@@ -26,6 +28,7 @@ router.post(
 router.patch(
   "/items/:id",
   authenticate,
+  requireAdmin,
   validateRequest({ params: gachaEventItemIdParamSchema }),
   validateRequest({ body: updateGachaEventItemSchema }),
   gachaEventItemController.update.bind(gachaEventItemController),
@@ -33,6 +36,7 @@ router.patch(
 router.delete(
   "/items/:id",
   authenticate,
+  requireAdmin,
   validateRequest({ params: gachaEventItemIdParamSchema }),
   gachaEventItemController.remove.bind(gachaEventItemController),
 );

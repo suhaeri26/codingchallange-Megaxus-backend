@@ -14,16 +14,12 @@ export interface GachaEventItemAttributes {
   eventId: number;
   itemId: number;
   dropRate: number;
-  stock: number | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export interface GachaEventItemCreationAttributes
-  extends Optional<
-    GachaEventItemAttributes,
-    "id" | "stock" | "createdAt" | "updatedAt"
-  > {}
+  extends Optional<GachaEventItemAttributes, "id" | "createdAt" | "updatedAt"> {}
 
 export class GachaEventItem
   extends Model<
@@ -37,7 +33,6 @@ export class GachaEventItem
   declare eventId: number;
   declare itemId: number;
   declare dropRate: number;
-  declare stock: number | null;
 
   declare event?: NonAttribute<GachaEvent>;
   declare item?: NonAttribute<Item>;
@@ -67,11 +62,6 @@ GachaEventItem.init(
     dropRate: {
       type: DataTypes.DECIMAL(5, 2),
       allowNull: false,
-    },
-
-    stock: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
     },
   },
   {
