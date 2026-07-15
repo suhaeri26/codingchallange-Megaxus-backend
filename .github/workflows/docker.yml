@@ -2,7 +2,7 @@ name: Docker Build & Push GHCR
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "release" ]
     tags: [ "v*" ]
 
 jobs:
