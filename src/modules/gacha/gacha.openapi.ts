@@ -35,3 +35,16 @@ registry.registerPath({
     },
   },
 });
+
+registry.registerPath({
+  method: "get",
+  path: "/gacha/admin/history",
+  tags: ["Gacha"],
+  summary: "Get all gacha history for admin",
+  security: [{ cookieAuth: [] }],
+  responses: {
+    200: {
+      description: "Admin gacha history fetched successfully",
+    },
+  },
+});

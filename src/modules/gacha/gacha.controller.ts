@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { sendSuccess } from "../../shared/http/response";
+import { sendPaginatedSuccess, sendSuccess } from "../../shared/http/response";
 import { DrawGachaRequest } from "./gacha.schema";
 import { gachaService } from "./gacha.service";
 
@@ -14,6 +14,14 @@ export class GachaController {
     const history = await gachaService.history(req.user!.id);
 
     sendSuccess(res, history);
+  }
+
+  async adminHistory(req: Request, res: Response): Promise<void> {
+    const page = Number(req.query.page ?? 1);
+    const limit = Number(req.query.limit ?? 10);
+    const result = await gachaService.adminHistory(page, limit);
+
+    sendPaginatedSuccess(res, result.rows, result.meta, "Gacha history fetched successfully.");
   }
 }
 

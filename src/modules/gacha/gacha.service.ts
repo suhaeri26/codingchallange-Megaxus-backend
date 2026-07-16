@@ -104,6 +104,36 @@ export class GachaService {
       order: [["createdAt", "DESC"]],
     });
   }
+
+  async adminHistory(page = 1, limit = 10): Promise<{
+    rows: GachaLog[];
+    meta: { page: number; limit: number; totalItems: number; totalPages: number };
+  }> {
+    const safePage = Math.max(1, Number(page) || 1);
+    const safeLimit = Math.min(100, Math.max(1, Number(limit) || 10));
+    const offset = (safePage - 1) * safeLimit;
+
+    const { rows, count } = await GachaLog.findAndCountAll({
+      include: [
+        { model: User, as: "user", attributes: ["id", "name", "email", "role"] },
+        { model: GachaEvent, as: "event", attributes: ["id", "name"] },
+        { model: GachaEventItem, as: "eventItem", include: [{ model: Item, as: "item", attributes: ["id", "name"] }] },
+      ],
+      order: [["createdAt", "DESC"]],
+      limit: safeLimit,
+      offset,
+    });
+
+    return {
+      rows,
+      meta: {
+        page: safePage,
+        limit: safeLimit,
+        totalItems: count,
+        totalPages: Math.max(1, Math.ceil(count / safeLimit)),
+      },
+    };
+  }
 }
 
 export const gachaService = new GachaService();

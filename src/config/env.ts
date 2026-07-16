@@ -3,6 +3,8 @@ import { z } from "zod";
 
 dotenv.config();
 
+const optionalString = z.string().trim().optional().default("");
+
 const environmentSchema = z.object({
   NODE_ENV: z
     .enum(["development", "test", "production"])
@@ -22,15 +24,15 @@ const environmentSchema = z.object({
     .enum(["true", "false"])
     .default("false")
     .transform((value) => value === "true"),
-  SMTP_HOST: z.string().min(1),
-  SMTP_PORT: z.coerce.number().int().positive(),
+  SMTP_HOST: optionalString,
+  SMTP_PORT: z.coerce.number().int().positive().optional().default(587),
   SMTP_SECURE: z
     .enum(["true", "false"])
     .default("false")
     .transform((value) => value === "true"),
-  SMTP_USERNAME: z.string().min(1),
-  SMTP_PASSWORD: z.string().min(1),
-  SMTP_FROM: z.string().min(1),
+  SMTP_USERNAME: optionalString,
+  SMTP_PASSWORD: optionalString,
+  SMTP_FROM: optionalString,
   APP_URL: z.string().url(),
   EMAIL_VERIFICATION_ENABLED: z
     .enum(["true", "false"])
